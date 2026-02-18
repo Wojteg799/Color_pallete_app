@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Palette Generator</title>
+    <meta name="description"
+        content="Extract beautiful color palettes from your images. Upload a photo and generate 1-6 harmonious colors instantly.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Ambient glow blobs -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="ambient-glow glow-3"></div>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <rect x="2" y="2" width="12" height="12" rx="3" fill="var(--accent-1, #6366f1)" />
+                    <rect x="18" y="2" width="12" height="12" rx="3" fill="var(--accent-2, #8b5cf6)" />
+                    <rect x="2" y="18" width="12" height="12" rx="3" fill="var(--accent-3, #a78bfa)" />
+                    <rect x="18" y="18" width="12" height="12" rx="3" fill="var(--accent-4, #c4b5fd)" />
+                </svg>
+            </div>
+            <div class="header-text">
+                <h1 data-i18n="title">Color Palette Generator</h1>
+                <p class="subtitle" data-i18n="subtitle">Wyciągnij paletę kolorów ze swojego zdjęcia</p>
+            </div>
+            <button class="lang-toggle" id="langToggle" title="Switch language">
+                <span class="lang-flag" id="langFlag">🇬🇧</span>
+                <span class="lang-code" id="langCode">EN</span>
+            </button>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section" id="uploadSection">
+                <div class="upload-zone" id="uploadZone">
+                    <div class="upload-icon">
+                        <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                            <path d="M32 8L32 40" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                            <path d="M20 20L32 8L44 20" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                            <path d="M8 40V48C8 52.4183 11.5817 56 16 56H48C52.4183 56 56 52.4183 56 48V40"
+                                stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <h2 data-i18n="uploadTitle">Przeciągnij zdjęcie tutaj</h2>
+                    <p data-i18n="uploadSubtitle">lub kliknij, aby wybrać plik</p>
+                    <span class="upload-formats">PNG, JPG, JPEG, WEBP, BMP</span>
+                    <input type="file" id="fileInput" accept="image/png,image/jpeg,image/jpg,image/webp,image/bmp"
+                        hidden>
+                </div>
+            </section>
+
+            <!-- Preview Section (hidden initially) -->
+            <section class="preview-section hidden" id="previewSection">
+                <div class="image-preview-card">
+                    <img id="imagePreview" src="" alt="Podgląd zdjęcia">
+                    <button class="replace-btn" id="replaceBtn" title="Podmień zdjęcie">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M4 4L16 16M16 4L4 16" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" />
+                        </svg>
+                        <span data-i18n="replaceImage">Podmień zdjęcie</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Controls -->
+            <section class="controls-section hidden" id="controlsSection">
+                <div class="control-card">
+                    <label for="colorCount" data-i18n="colorCountLabel">Liczba kolorów w palecie</label>
+                    <div class="slider-wrapper">
+                        <input type="range" id="colorCount" min="1" max="6" value="5" step="1">
+                        <div class="slider-labels">
+                            <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span>
+                        </div>
+                        <div class="slider-value" id="sliderValue">5</div>
+                    </div>
+                    <button class="generate-btn" id="generateBtn">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path
+                                d="M10 2V5M10 15V18M18 10H15M5 10H2M15.66 4.34L13.54 6.46M6.46 13.54L4.34 15.66M15.66 15.66L13.54 13.54M6.46 6.46L4.34 4.34"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                        <span data-i18n="generateBtn">Generuj paletę</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Palette Display -->
+            <section class="palette-section hidden" id="paletteSection">
+                <h2 class="section-title" data-i18n="paletteTitle">Twoja paleta kolorów</h2>
+                <div class="palette-grid" id="paletteGrid">
+                    <!-- Color swatches will be injected here -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Toast notification -->
+        <div class="toast hidden" id="toast">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8L7 12L13 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
+            <span id="toastText">Skopiowano!</span>
+        </div>
+    </div>
+
+    <!-- Hidden canvas for pixel extraction -->
+    <canvas id="hiddenCanvas" style="display:none;"></canvas>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
